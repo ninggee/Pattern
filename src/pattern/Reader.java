@@ -2,6 +2,7 @@ package pattern;
 
 import com.google.gson.*;
 import edu.tamu.aser.mcr.trace.AbstractNode;
+import edu.tamu.aser.mcr.trace.ReadNode;
 import edu.tamu.aser.mcr.trace.WriteNode;
 
 
@@ -54,10 +55,20 @@ public class Reader {
         JsonArray fulltrace = obj.get("fulltrace").getAsJsonArray();
 
         for (JsonElement o :fulltrace) {
-            System.out.println(o);
+//            System.out.println(o);
             JsonObject temp = o.getAsJsonObject();
 
-            String nodeType = temp.get("type").getAsString();
+            try {
+
+                AbstractNode node = getNodeFromJsonObject(temp);
+                System.out.println("node:" + node);
+            } catch (Exception e) {
+                System.out.println("error:" + o);
+                e.printStackTrace();
+                System.exit(2);
+            }
+
+
 
 //            switch (nodeType) {
 //
@@ -72,30 +83,33 @@ public class Reader {
 
         String type = object.get("type").getAsString();
         long GID = object.get("GID").getAsLong();
-        int ID = object.get("id").getAsInt();
+        int ID = object.get("ID").getAsInt();
         String label = object.get("label").getAsString();
         long tid = object.get("tid").getAsLong();
 
         switch (type) {
+            case "READ":
             case "WRITE":
                 String value = object.get("value").getAsString();
                 String addr = object.get("addr").getAsString();
-                long prevSyncId = object.get("prevSyncId").getAsLong();
-                long prevBranchId = object.get("prevBranchId").getAsLong();
+                long prevSyncId = object.get("prevSyncId") == null ? 0 : object.get("prevSyncId").getAsLong() ;
+                long prevBranchId = object.get("prevBranchId")== null ? 0 : object.get("prevBranchId").getAsLong();
+                AbstractNode node;
 
-                WriteNode writeNode = new WriteNode(GID, tid, ID, addr, value, AbstractNode.TYPE.WRITE, label);
-                writeNode.setPrevBranchId(prevBranchId);
-                writeNode.setPrevSyncId(prevSyncId);
-                return writeNode;
-                break;
+                if (type == "READ") {
+                    node = new ReadNode(GID, tid, ID, addr, value, AbstractNode.TYPE.WRITE, label);
+                } else {
+                    node = new WriteNode(GID, tid, ID, addr, value, AbstractNode.TYPE.WRITE, label);
+                }
 
-            case "READ":
-
-
-
-
+                // read node and write node are only different with their type
+                // so cast node to WriteNode to call related method
+                ((WriteNode)node).setPrevBranchId(prevBranchId);
+                ((WriteNode)node).setPrevSyncId(prevSyncId);
+                return node;
+            default:
+                return null;
 //                return new WriteNode()
         }
-        return null;
     }
 }
