@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 public class Pattern {
 
     public static void main(String[] args) {
-        String content =  Reader.readFromFile("D:\\MCR\\error.json");
+        String content =  Reader.readFromFile("../json/error.json");
         List<AbstractNode> nodes = Reader.getNodesFromString(content);
         List<String> sharedVariables = Reader.getSharedVariables(content);
 
@@ -26,7 +26,7 @@ public class Pattern {
 
         List<pattern.Pattern> errorPatterns = getPatterns(content);
 
-        content = Reader.readFromFile("D:\\MCR\\result.json");
+        content = Reader.readFromFile("../json/result.json");
 
         List<pattern.Pattern> successPtterns = getPatterns(content);
 
