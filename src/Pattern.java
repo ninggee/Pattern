@@ -1,7 +1,5 @@
 import edu.tamu.aser.mcr.trace.AbstractNode;
 import edu.tamu.aser.mcr.trace.IMemNode;
-import edu.tamu.aser.mcr.trace.ReadNode;
-import edu.tamu.aser.mcr.trace.WriteNode;
 import pattern.Helper;
 import pattern.Reader;
 
@@ -14,10 +12,23 @@ import java.util.stream.Collectors;
 public class Pattern {
 
     public static void main(String[] args) {
-        String content =  Reader.readFromFile("../json/error.json");
+
+        String content =  Reader.readFromFile("./json/error.json");
+
         List<AbstractNode> nodes = Reader.getNodesFromString(content);
+
+        for(AbstractNode node : nodes){
+
+            System.out.println("node:" + node);
+        }
+
         List<String> sharedVariables = Reader.getSharedVariables(content);
 
+        for(String sharedVariable : sharedVariables){
+            System.out.println("sharedVariable:" + sharedVariable);
+        }
+
+        System.out.println(" -- - - -- - - - ");
 
         List<IMemNode> RWNodes = nodes.stream().filter(node -> (node.getType() == AbstractNode.TYPE.READ || node.getType() == AbstractNode.TYPE.WRITE))
                 .filter(node -> sharedVariables.contains(((IMemNode)node).getAddr())).map(node -> (IMemNode)node).collect(Collectors.toList());
@@ -26,7 +37,7 @@ public class Pattern {
 
         List<pattern.Pattern> errorPatterns = getPatterns(content);
 
-        content = Reader.readFromFile("../json/result.json");
+        content = Reader.readFromFile("./json/result.json");
 
         List<pattern.Pattern> successPtterns = getPatterns(content);
 
