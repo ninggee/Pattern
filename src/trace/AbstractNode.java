@@ -7,6 +7,7 @@ import java.util.Objects;
  */
 
 public class AbstractNode {
+
     protected long GID;
     protected int ID;
     protected long tid;
@@ -14,7 +15,7 @@ public class AbstractNode {
     protected String label;
 
 
-    public AbstractNode(long GID, int ID, long tid, TYPE type) {
+    public AbstractNode(long GID,long tid, int ID,  TYPE type) {
         this.GID = GID;
         this.ID = ID;
         this.tid = tid;
@@ -23,7 +24,7 @@ public class AbstractNode {
         this.label = "other node";
     }
 
-    public AbstractNode(long GID, int ID, long tid, TYPE type, String label) {
+    public AbstractNode(long GID,long tid, int ID,  TYPE type, String label) {
         this.GID = GID;
         this.ID = ID;
         this.tid = tid;

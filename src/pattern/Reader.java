@@ -1,8 +1,7 @@
 package pattern;
 
 import com.google.gson.*;
-import edu.tamu.aser.mcr.trace.*;
-
+import trace.*;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -12,7 +11,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.locks.Lock;
 
 public class Reader {
 
@@ -100,11 +98,11 @@ public class Reader {
                 AbstractNode node;
 
                 if (type.equals("READ")) {
-                    node = new ReadNode(GID, tid, ID, addr, value, AbstractNode.TYPE.READ, label);
+                    node = new ReadNode(GID, tid, ID, addr, value, TYPE.READ, label);
                     ((ReadNode)node).setPrevBranchId(prevBranchId);
                     ((ReadNode)node).setPrevSyncId(prevSyncId);
                 } else {
-                    node = new WriteNode(GID, tid, ID, addr, value, AbstractNode.TYPE.WRITE, label);
+                    node = new WriteNode(GID, tid, ID, addr, value, TYPE.WRITE, label);
                     ((WriteNode)node).setPrevBranchId(prevBranchId);
                     ((WriteNode)node).setPrevSyncId(prevSyncId);
                 }
@@ -114,36 +112,36 @@ public class Reader {
                 long did = object.get("did").getAsLong();
                 String lock_addr = object.get("lock_addr").getAsString();
                 if (type.equals("LOCK")) {
-                   node = new LockNode(GID, tid, ID, lock_addr, AbstractNode.TYPE.LOCK);
+                   node = new LockNode(GID, tid, ID, lock_addr, TYPE.LOCK);
                     ((LockNode)node).setDid(did);
                 } else {
-                    node = new UnlockNode(GID, tid, ID, lock_addr, AbstractNode.TYPE.UNLOCK);
+                    node = new UnlockNode(GID, tid, ID, lock_addr, TYPE.UNLOCK);
                     ((UnlockNode)node).setDid(did);
                 }
                 return node;
             case "START":
                 String tid_child = object.get("tid_child").getAsString();
-                return new StartNode(GID, tid, ID, tid_child, AbstractNode.TYPE.START);
+                return new StartNode(GID, tid, ID, tid_child, TYPE.START);
             case "JOIN":
                 String tid_join = object.get("tid_join").getAsString();
-                return new JoinNode(GID, tid, ID, tid_join, AbstractNode.TYPE.JOIN);
+                return new JoinNode(GID, tid, ID, tid_join, TYPE.JOIN);
             case "INIT":
                 value = object.get("value").getAsString();
-                return new InitNode(GID, tid, ID, addr, value, AbstractNode.TYPE.INIT);
+                return new InitNode(GID, tid, ID, addr, value, TYPE.INIT);
             case "WATI":
                 String sig_addr = object.get("sig_addr").getAsString();
-                return new WaitNode(GID, tid, ID, sig_addr, AbstractNode.TYPE.WAIT);
+                return new WaitNode(GID, tid, ID, sig_addr, TYPE.WAIT);
             case "NOTIFY":
                 sig_addr = object.get("sig_addr").getAsString();
                 long waitTid = object.get("waitTid").getAsLong();
-                return new NotifyNode(GID, tid, ID, sig_addr, waitTid, AbstractNode.TYPE.NOTIFY);
+                return new NotifyNode(GID, tid, ID, sig_addr, waitTid, TYPE.NOTIFY);
             case "BRANCH":
-                return new BranchNode(GID, tid, ID, AbstractNode.TYPE.BRANCH);
+                return new BranchNode(GID, tid, ID, TYPE.BRANCH);
             case "BB":
-                return new BBNode(GID, tid, ID, AbstractNode.TYPE.BB);
+                return new BBNode(GID, tid, ID, TYPE.BB);
             case "PROPERTY":
                 String object_addr = object.get("object_addr").getAsString();
-                return new PropertyNode(GID, tid, ID, object_addr, AbstractNode.TYPE.PROPERTY);
+                return new PropertyNode(GID, tid, ID, object_addr, TYPE.PROPERTY);
             default:
                 throw new IllegalStateException();
         }

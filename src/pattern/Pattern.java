@@ -1,9 +1,9 @@
 package pattern;
 
-import edu.tamu.aser.mcr.trace.AbstractNode;
-import edu.tamu.aser.mcr.trace.IMemNode;
-import edu.tamu.aser.mcr.trace.ReadNode;
-import edu.tamu.aser.mcr.trace.WriteNode;
+import trace.IMemNode;
+import trace.ReadNode;
+import trace.TYPE;
+import trace.WriteNode;
 
 import javax.swing.*;
 import java.util.*;
@@ -48,7 +48,7 @@ public class Pattern {
             if(nodes1.get(i).getType() != nodes2.get(i).getType()) {
                 return  false;
             } else {
-                if(nodes1.get(i).getType() == AbstractNode.TYPE.READ) {
+                if(nodes1.get(i).getType() == TYPE.READ) {
                     if(!((ReadNode)nodes1.get(i)).getLabel().equals(((ReadNode)nodes2.get(i)).getLabel())) {
                         return false;
                     }
@@ -163,11 +163,11 @@ public class Pattern {
     private static List<Pattern> getPatterns(List<IMemNode> nodes, IMemNode currentNode, int start, int end) {
         List<Pattern> tempPattern = new ArrayList<>();
 
-        if (currentNode.getType() == AbstractNode.TYPE.READ) {
+        if (currentNode.getType() == TYPE.READ) {
             for (int i = start; i < end; i++) {
                 IMemNode node = nodes.get(i);
 
-                if (node.getType() == AbstractNode.TYPE.WRITE &&
+                if (node.getType() == TYPE.WRITE &&
                         node.getAddr().equals(currentNode.getAddr()) &&
                         node.getTid() != currentNode.getTid()){
                     tempPattern.add(new Pattern(Arrays.asList(currentNode, node)));
@@ -181,7 +181,7 @@ public class Pattern {
                 // wr node
                 // access the same location
                 // in different thread
-                if (node.getType() == AbstractNode.TYPE.READ &&
+                if (node.getType() == TYPE.READ &&
                         node.getAddr().equals(currentNode.getAddr()) &&
                         node.getTid() != currentNode.getTid()) {
                     tempPattern.add(new Pattern(Arrays.asList(currentNode, node)));
@@ -189,7 +189,7 @@ public class Pattern {
                 }
 
                 // ww node
-                if (node.getType() == AbstractNode.TYPE.WRITE &&
+                if (node.getType() == TYPE.WRITE &&
                         node.getAddr().equals(currentNode.getAddr()) &&
                         node.getTid() != currentNode.getTid()){
                     tempPattern.add(new Pattern(Arrays.asList(currentNode, node)));
@@ -216,9 +216,9 @@ public class Pattern {
         if (nodes.size() <= 3) {
             StringBuilder type = new StringBuilder();
             for (IMemNode node : nodes) {
-                if (node.getType() == AbstractNode.TYPE.READ) {
+                if (node.getType() == TYPE.READ) {
                     type.append("R");
-                } else if (node.getType() ==  AbstractNode.TYPE.WRITE) {
+                } else if (node.getType() == TYPE.WRITE) {
                     type.append("W");
                 } else {
                     throw new IllegalArgumentException();

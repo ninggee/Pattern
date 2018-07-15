@@ -1,9 +1,9 @@
-import edu.tamu.aser.mcr.trace.AbstractNode;
-import edu.tamu.aser.mcr.trace.IMemNode;
-import edu.tamu.aser.mcr.trace.ReadNode;
-import edu.tamu.aser.mcr.trace.WriteNode;
+
 import pattern.Helper;
 import pattern.Reader;
+import trace.AbstractNode;
+import trace.IMemNode;
+import trace.TYPE;
 
 
 import java.util.ArrayList;
@@ -14,19 +14,32 @@ import java.util.stream.Collectors;
 public class Pattern {
 
     public static void main(String[] args) {
-        String content =  Reader.readFromFile("../json/error.json");
+
+        String content =  Reader.readFromFile("./json/error.json");
+
         List<AbstractNode> nodes = Reader.getNodesFromString(content);
+
+        for(AbstractNode node : nodes){
+
+            System.out.println("node:" + node);
+        }
+
         List<String> sharedVariables = Reader.getSharedVariables(content);
 
+        for(String sharedVariable : sharedVariables){
+            System.out.println("sharedVariable:" + sharedVariable);
+        }
 
-        List<IMemNode> RWNodes = nodes.stream().filter(node -> (node.getType() == AbstractNode.TYPE.READ || node.getType() == AbstractNode.TYPE.WRITE))
+        System.out.println(" -- - - -- - - - ");
+
+        List<IMemNode> RWNodes = nodes.stream().filter(node -> (node.getType() == TYPE.READ || node.getType() == TYPE.WRITE))
                 .filter(node -> sharedVariables.contains(((IMemNode)node).getAddr())).map(node -> (IMemNode)node).collect(Collectors.toList());
 
 
 
         List<pattern.Pattern> errorPatterns = getPatterns(content);
 
-        content = Reader.readFromFile("../json/result.json");
+        content = Reader.readFromFile("./json/result.json");
 
         List<pattern.Pattern> successPtterns = getPatterns(content);
 
@@ -69,7 +82,7 @@ public class Pattern {
         List<String> sharedVariables = Reader.getSharedVariables(content);
 
 
-        List<IMemNode> RWNodes = nodes.stream().filter(node -> (node.getType() == AbstractNode.TYPE.READ || node.getType() == AbstractNode.TYPE.WRITE))
+        List<IMemNode> RWNodes = nodes.stream().filter(node -> (node.getType() == TYPE.READ || node.getType() == TYPE.WRITE))
                 .filter(node -> sharedVariables.contains(((IMemNode)node).getAddr())).map(node -> (IMemNode)node).collect(Collectors.toList());
 //
 //        for (IMemNode node: RWNodes) {
@@ -79,7 +92,6 @@ public class Pattern {
 //                System.out.println(node + " " + ((ReadNode)node).getLabel());
 //            }
 //        }
-
 
         List<pattern.Pattern> patterns = pattern.Pattern.getPatternsFromNodes(RWNodes, 0);
         List<pattern.Pattern> falconPatterns = pattern.Pattern.getPatternsFromLengthTwoPattern(patterns);
