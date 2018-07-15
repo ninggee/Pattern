@@ -2,6 +2,8 @@
 import pattern.Helper;
 import pattern.Reader;
 import trace.AbstractNode;
+import trace.IMemNode;
+import trace.TYPE;
 
 
 import java.util.ArrayList;
@@ -30,7 +32,7 @@ public class Pattern {
 
         System.out.println(" -- - - -- - - - ");
 
-        List<IMemNode> RWNodes = nodes.stream().filter(node -> (node.getType() == AbstractNode.TYPE.READ || node.getType() == AbstractNode.TYPE.WRITE))
+        List<IMemNode> RWNodes = nodes.stream().filter(node -> (node.getType() == TYPE.READ || node.getType() == TYPE.WRITE))
                 .filter(node -> sharedVariables.contains(((IMemNode)node).getAddr())).map(node -> (IMemNode)node).collect(Collectors.toList());
 
 
@@ -80,7 +82,7 @@ public class Pattern {
         List<String> sharedVariables = Reader.getSharedVariables(content);
 
 
-        List<IMemNode> RWNodes = nodes.stream().filter(node -> (node.getType() == AbstractNode.TYPE.READ || node.getType() == AbstractNode.TYPE.WRITE))
+        List<IMemNode> RWNodes = nodes.stream().filter(node -> (node.getType() == TYPE.READ || node.getType() == TYPE.WRITE))
                 .filter(node -> sharedVariables.contains(((IMemNode)node).getAddr())).map(node -> (IMemNode)node).collect(Collectors.toList());
 //
 //        for (IMemNode node: RWNodes) {

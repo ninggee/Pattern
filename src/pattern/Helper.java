@@ -1,9 +1,6 @@
 package pattern;
 
-import edu.tamu.aser.mcr.trace.AbstractNode;
-import edu.tamu.aser.mcr.trace.IMemNode;
-import edu.tamu.aser.mcr.trace.ReadNode;
-import edu.tamu.aser.mcr.trace.WriteNode;
+import trace.*;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -45,7 +42,7 @@ public class Helper {
             return false;
         }
 
-        if(node1.getType() == AbstractNode.TYPE.READ) {
+        if(node1.getType() == TYPE.READ) {
             return ((ReadNode)node1).getLabel().equals(((ReadNode)node2).getLabel());
         } else {
             return ((WriteNode)node1).getLabel().equals(((WriteNode)node2).getLabel());
