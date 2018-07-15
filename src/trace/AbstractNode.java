@@ -7,6 +7,7 @@ import java.util.Objects;
  */
 
 public class AbstractNode {
+
     protected long GID;
     protected int ID;
     protected long tid;

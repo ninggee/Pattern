@@ -1,7 +1,7 @@
-import edu.tamu.aser.mcr.trace.AbstractNode;
-import edu.tamu.aser.mcr.trace.IMemNode;
+
 import pattern.Helper;
 import pattern.Reader;
+import trace.AbstractNode;
 
 
 import java.util.ArrayList;
@@ -90,7 +90,6 @@ public class Pattern {
 //                System.out.println(node + " " + ((ReadNode)node).getLabel());
 //            }
 //        }
-
 
         List<pattern.Pattern> patterns = pattern.Pattern.getPatternsFromNodes(RWNodes, 0);
         List<pattern.Pattern> falconPatterns = pattern.Pattern.getPatternsFromLengthTwoPattern(patterns);

@@ -1,8 +1,8 @@
 package pattern;
 
 import com.google.gson.*;
-import edu.tamu.aser.mcr.trace.*;
-
+import jdk.nashorn.internal.ir.PropertyNode;
+import trace.*;
 
 import java.io.BufferedReader;
 import java.io.File;
